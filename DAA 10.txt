@@ -1,0 +1,53 @@
+#include<stdio.h>
+#define TRUE 1
+#define FALSE 0
+int inc[50],a[50],d;
+int promising(int i,int wt,int total)
+{
+ return ((wt+total)>=d)&&((wt==d)||(wt+a[i+1]<=d));
+}
+void sumset(int i,int wt,int total)
+{
+ int j;
+ if(promising(i,wt,total))
+ {
+ if(wt==d)
+ {
+ printf("\n{");
+ for(j=0;j<=i;j++)
+ if(inc[j])
+ printf("%d",a[j]);
+ printf("}\n");
+ }
+ else
+ {
+ inc[i+1]=TRUE;
+ sumset(i+1, wt+a[i+1], total-a[i+1]);
+ inc[i+1]=FALSE;
+ sumset(i+1, wt, total-a[i+1]);
+ }
+ }
+}
+void main()
+{
+ int i,j,n,temp,total=0;
+ printf("Enter how many numbers are in a set:\n");
+ scanf("%d",&n);
+ printf("Enter %d numbers to the set:\n",n);
+ for(i=0;i<n;i++)
+ {
+ scanf("%d",&a[i]);
+ total=total+a[i];
+ }
+ printf("Input the d value to create subset sum:\n");
+ scanf("%d",&d);
+ if((total<d))
+ printf("Subset construction is not possible!");
+ else
+ {
+ for(i=0;i<n;i++)
+ inc[i]=0;
+ printf("The solution using backtracking is:\n");
+ sumset(-1,0,total);
+ }
+}
